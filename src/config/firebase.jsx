@@ -14,7 +14,7 @@ storageBucket: "cooklet-89a59.appspot.com",
 messagingSenderId: "992431415792",
 appId: "1:992431415792:web:8e7cb181d6fbbc1b1efd35"
 };
-
+ 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
