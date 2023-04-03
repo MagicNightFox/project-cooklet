@@ -1,0 +1,19 @@
+
+.recipe{
+    
+    top:0;
+    left: 0;
+    overflow: hidden;
+
+}
+
+input[type=text]{
+    width: 100%;
+}
+
+
+textarea {
+    width:100%;
+    resize: none;
+    padding: 1px 5px;
+}
