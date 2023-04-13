@@ -1,18 +1,26 @@
 
-.recipe{
+.newRecipe{
     
     top:0;
     left: 0;
     overflow: hidden;
+    
 
 }
 
-input[type=text]{
+.newRecipe h2{
+    padding:5px;
+}
+
+.newRecipe form{
+padding:10px;
+}
+
+.newRecipe input[type=text]{
     width: 100%;
 }
 
-
-textarea {
+.newRecipe textarea {
     width:100%;
     resize: none;
     padding: 1px 5px;

@@ -5,16 +5,24 @@ import { getFirestore } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
+
+const api = import.meta.env.VITE_APIKEY;
+const domain = import.meta.env.VITE_AUTH_DOMAIN
+const project = import.meta.env.VITE_PROJECT_ID;
+const bucket = import.meta.env.VITE_STORAGE_BUCKET;
+const sender = import.meta.env.VITE_SENDER_ID;
+const appid = import.meta.env.VITE_APP_ID;
+
 // Your web app's Firebase configuration
 const firebaseConfig = {
-apiKey: "AIzaSyDuedY6-D_KW04VimzfID6fQhk8CYBGQLA",
-authDomain: "cooklet-89a59.firebaseapp.com",
-projectId: "cooklet-89a59",
-storageBucket: "cooklet-89a59.appspot.com",
-messagingSenderId: "992431415792",
-appId: "1:992431415792:web:8e7cb181d6fbbc1b1efd35"
+    apiKey: api,
+    authDomain: domain,
+    projectId: project,
+    storageBucket: bucket,
+    messagingSenderId: parseInt(sender),
+    appId: appid
 };
- 
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

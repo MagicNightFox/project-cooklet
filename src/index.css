@@ -11,7 +11,13 @@
   line-height: 24px;
   font-weight: 400;
   /*background-image: radial-gradient(ellipse at top left, #7f50e4, #4c05d0);*/
-  background-image: radial-gradient(ellipse at top left, #8ac2ba, #d2fff8);
+  background-image: url("https://kitchenstory.cz/wp-content/uploads/2015/05/DSC_0046.jpg");
+  background-position:center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  
+  /*background-image: radial-gradient(ellipse at top left, #8ac2ba, #d2fff8);*/
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -23,4 +29,5 @@ body {
   margin: 0;
   text-align: center;
   color: #e6ddf9;
+
 }

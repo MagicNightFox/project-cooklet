@@ -1,27 +1,19 @@
-.body{
-    background-color: rgba(255, 255,255,0.7);
-    margin: 0 15%;
-    padding-top: 3%; 
-    min-height: 100vh;
-}
 
 .recipesGrid{
     display: grid;
-    /*grid-template-columns: 25% 25% 25% 25%;
-    grid-gap: 3%;*/
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 3%;
+    gap: 2vw;
     padding: 0 5%;
     align-items: stretch;
     
 }
 
-h1{
+.recipesGrid h1{
     padding: 100px 0 10000px 0;
     color:gray; 
 }
 
-.addRecipe button{
+.addRecipeSmall button{
     border: none;
     padding: 2rem 2rem;
     margin: 2rem 0;
@@ -30,11 +22,91 @@ h1{
         box-shadow: 0px 0px 10px 5px rgba(61, 61, 61, 0.2);
     }
     
-    .addRecipe button:hover{
+.addRecipeSmall button:hover{
         cursor: pointer;
         box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
         /*border-radius: 10px;*/
         transform: scale(1.05);
         max-height:15rem;
         animation: recipeSlideOut 1s;
+    }
+
+/*   jednotlivé recepty na stránce   */
+
+.recipesGrid .recipeSmall{
+        overflow:hidden;
+        border-radius: 25px;
+        transition: box-shadow 0.5s, border-radius 0.5s;
+        box-shadow: 0px 0px 10px 5px rgba(61, 61, 61, 0.2);
+        height: 152px;
+        background-color: white;
+        color: black;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+.recipesGrid .recipeSmall:hover{
+        cursor: pointer;
+        box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+    
+.recipesGrid .recipeInfoSmall{
+        position:absolute;
+        height: 100%;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.418);
+        opacity: 0;
+        transition: opacity 1s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width:100%;
+    }
+
+.recipesGrid .recipeInfoSmall:hover{
+        opacity: 100;
+        
+    }
+    
+.recipesGrid .recipeNameSmall{
+        /*
+            IMPLEMENT UPLOADED IMAGE AS BCG MAYBE
+
+        background-size: cover;
+        background-position: center;
+        */
+        height: fit-content;
+        background-color: white;
+        overflow: hidden;
+        transition: filter 0.5s;
+    }
+
+    .recipesGrid .recipeNameSmall h2{
+        padding: 5px;
+    }
+
+    .recipesGrid .recipeSmall:hover > .recipeNameSmall{
+        filter: blur(4px);
+    }
+    .recipesGrid h2{
+        font-family: "Corbel";
+        text-transform: capitalize;
+        font-size: 20pt;
+    color: black;
+    text-shadow: #FC0 1px 0 10px;
+    }
+    
+    .recipesGrid a{
+        text-decoration: none;
+    }
+
+    .recipesGrid .recipeAuthorSmall{
+        position: absolute;
+        top:0;
+        right:10%;
+        font-size: 10px;
     }

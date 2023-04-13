@@ -14,15 +14,16 @@ function NewRecipe({onSent, onAddRecipe}){
     return(
         <>
         <div className={styles.body}>
-        <div className={styles.recipe}>
+        <div className={styles.newRecipe}>
+            <h2>PŘIDEJ RECEPT</h2>
             <form onSubmit={submitHandler}>
-                <label htmlFor="name">Název </label><br/>
+                <label htmlFor="name">Název </label>
                 <input id="name" className={styles.name} type="text" required onChange={nameChangeHandler}></input>
                 <br/>
-                <label htmlFor="description">Popis </label><br/>
+                <label htmlFor="description">Popis </label>
                 <input type="text" id="description" required onChange={descriptionChangeHandler}></input>
                 <br/>
-                <label htmlFor="instructions">Postup</label><br/>
+                <label htmlFor="instructions">Postup</label>
                 <div className={styles.textAreaWrapper}>
                 <textarea id="instructions" cols={30} rows={10} required onChange={instructionsChangeHandler}></textarea>
                 </div>
@@ -59,7 +60,9 @@ function NewRecipe({onSent, onAddRecipe}){
                 description: description,
                 instructions: instructions,
                 ingredients: ingredients,
+                userEmail: auth?.currentUser?.email,
                 userId: auth?.currentUser?.uid,
+                author: auth?.currentUser?.displayName,
             };
             onAddRecipe(recipeData);
             onSent();

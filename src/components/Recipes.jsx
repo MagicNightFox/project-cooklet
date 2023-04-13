@@ -1,5 +1,5 @@
 import styles from "./Recipes.module.css";
-import Recipe from "./Recipe";
+/*import Recipe from "./Recipe";*/
 import NewRecipe from "./NewRecipe";
 import BackdropModal from "./BackdropModal";
 
@@ -7,8 +7,9 @@ import {db} from "../config/firebase";
 import {getDocs, collection, addDoc, deleteDoc, doc, updateDoc} from "firebase/firestore";
 
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-function Recipes(props) {
+function Recipes() {
 //database recipes
 const [recipeList, setRecipeList] = useState([]);
 
@@ -24,7 +25,7 @@ const getRecipeList = async () => {
         console.error("Error retrieving Docs from database: ", error);
     }
 };
-useEffect(() => {
+useEffect(() => { 
   getRecipeList();
 }, []);
 //  Adding recipes to the database
@@ -60,17 +61,26 @@ const [elementIsVisible, setElementIsVisible] = useState(false);
 return( <div className={styles.body}>
 <div className={styles.recipesGrid}>
 {recipeList.map((recipe) => (
+      
 <div key={recipe.id}>
-          <Recipe
-          key={recipe.id}
-          name={recipe.name}
-          description={recipe.description}
-          instructions={recipe.instructions}
-          ingredients={recipe.ingredients}
-          onDelete={() => deleteRecipe(recipe.id)}
-        />
-        </div>
-        ))}
+  <Link to={`/Recipe/${recipe.id}`}>
+  <div className={styles.recipeSmall}>
+    <div className={styles.recipeNameSmall}>
+      <h2>{recipe.name}</h2>
+      </div>
+      
+    <div className={styles.recipeInfoSmall}>
+      <p>{recipe.description}</p>
+      
+      <button onClick={() => deleteRecipe(recipe.id)}>Delete</button>
+      <p className={styles.recipeAuthorSmall}>{recipe.author}</p>
+      </div>
+      
+  </div>
+  </Link>
+</div>
+      
+      ))}
 </div>
 <br />
 
@@ -83,51 +93,13 @@ return( <div className={styles.body}>
           />
         </BackdropModal>
       ) : null}
-      <div className={styles.addRecipe}>
-        <button onClick={showElementHandler}>+</button>
+      <div className={styles.addRecipeSmall}>
+        <button onClick={showElementHandler}>Přidej vlastní recept!</button>
       </div>
 </div>
 );
 
 
-
-//UNCOMMENT THIS AFTER SETTING UP DATABASE:
-
-
-  
-/*
-  return (
-    <div className={styles.body}>
-      <div className={styles.recipesGrid}>
-        {recipes.map((recipe) => (
-          <Recipe
-            key={recipe.description}
-            name={recipe.name}
-            description={recipe.description}
-            instructions={recipe.instructions}
-            ingredients={recipe.ingredients}
-          />
-        ))}
-        ;
-      </div>
-
-      <br />
-
-      <hr />
-      {elementIsVisible ? (
-        <BackdropModal onClose={hideElementHandler}>
-          <NewRecipe
-            onSent={hideElementHandler}
-            onAddRecipe={addRecipeHandler}
-          />
-        </BackdropModal>
-      ) : null}
-      <div className={styles.addRecipe}>
-        <button onClick={showElementHandler}>+</button>
-      </div>
-    </div>
-  );
-  */
 }
 
 export default Recipes;

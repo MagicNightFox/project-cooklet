@@ -1,0 +1,39 @@
+--Authentication (form for login, signup and logout)
+
+return <div>
+        <div className={styles.register}>
+        <label htmlFor="email">Email:</label> 
+        <input 
+            type="email" 
+            placeholder="Email..." 
+            onChange={(e) => setEmail(e.target.value)}
+            /> 
+            <br/>
+            <label htmlFor="password">Password:</label>
+        <input 
+            id="password"
+            type="password" 
+            placeholder="Password..." 
+            onChange={(e) => setPassword(e.target.value)}
+            /> 
+            <br/>
+        <button onClick={signIn}> Sign In </button>
+        <button onClick={signInWithGoogle}> Sign In With Google </button>
+        <br/>
+        <button onClick={logOut}> Sign Out </button>
+        </div>
+    </div>
+
+    _____________________________________________________________________________________________
+
+    --Navigating to another page 
+let navigate = useNavigate();
+
+    const userHandler = async () => {
+try{
+    navigate("/", {replace: true});
+}
+catch(e){
+console.error(e);
+}
+};
