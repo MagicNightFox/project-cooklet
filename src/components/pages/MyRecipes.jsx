@@ -3,19 +3,22 @@ import NewRecipe from "../NewRecipe";
 import BackdropModal from "../BackdropModal";
 
 import {db, auth} from "../../config/firebase";
-import {getDocs, collection, addDoc, deleteDoc, doc, getDoc, where, query, QuerySnapshot} from "firebase/firestore";
+import {getDocs, collection, addDoc, where, query} from "firebase/firestore";
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 function MyRecipes(){
+  const navigate = useNavigate();
     const [loggedUser, setLoggedUser] = useState();
+
     function getUser(){
             auth.onAuthStateChanged(async function(user) {
             if (user) {
-              setLoggedUser(auth.currentUser);          //uživatel je přihlášen a jeho jméno je zapsáno pro vyrenderování v navbaru
+              await setLoggedUser(auth.currentUser);          //uživatel je přihlášen a jeho jméno je zapsáno pro vyrenderování v navbaru
             }
             else{
-              setLoggedUser(null);                                  //uživatel není přihlášen
+              setLoggedUser(null);
+              navigate("/", {replace:true});                                 //uživatel není přihlášen
             }
           });
         }
@@ -97,7 +100,7 @@ function MyRecipes(){
       {loggedUser ?
       
       <div className={styles.addRecipeSmall}>
-        <button onClick={showElementHandler}>Přidej vlastní recept!</button>
+        <button onClick={showElementHandler}>Add your own recipe!</button>
       </div>
     : null}
     </div>

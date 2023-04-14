@@ -1,4 +1,3 @@
-
 import styles from "./EditRecipe.module.css";
 import {db, auth} from "../config/firebase";
 import { useEffect, useState } from 'react';
@@ -11,10 +10,9 @@ function EditRecipe(){
     const [recipe, setRecipe] = useState(null);
     const [newName, setNewName] = useState();
     const [newDescription, setNewDescription] = useState();
-    const [longDescription, setLongDescription] = useState();
     const [newInstructions, setNewInstructions] = useState();
     const [newIngredients, setNewIngredients] = useState([]);
-    //check if the user is logged AND if the logged user is the author
+    //kontola jestli je uživatel přihlášen + jestli je autorem
     const [isAuthor, setIsAuthor] = useState(false);
     
     const navigate = useNavigate();
@@ -55,14 +53,20 @@ function EditRecipe(){
       const values = [...newIngredients];
       values[index] = event;
       setNewIngredients(values);
-    };
+    };//při změně v daném inputu ingredience se zavolá funkce, předá se jí index a změněný input. Vytvoří se nové pole identické k 
+    //poli ingrediencí v usestatu. vytvořenému poli se na obdrženém indexu uloží daná hodnota a poté se pole ingrediencí nastaví 
+    //na vytvořené pole, tím se úspěšně změní právě ta daná ingredience
+
     const addIngredientHandler = () => {
       const values = [...newIngredients];
       values.push('');
       setNewIngredients(values);
-    };
+    };//Podobný způsob jako u změny ingredience, tady se při kliknutí na button na konec pole přidá prázdná hodnota, 
+    //tím se obnoví usestate a níže ve formuláři se vyrenderuje další položka input
+
+
     function submitHandler(e){
-      const validIngredients = newIngredients.filter(ingredient => ingredient.trim() !== '');
+      const validIngredients = newIngredients.filter(ingredient => ingredient.trim() !== ''); //filter nám přeskočí ingredience, které jsou po odstranění whitespacu prázdné
       if(newName.trim().length === 0 || newDescription.trim().length === 0 || newInstructions.trim().length === 0 || validIngredients.length === 0){
         alert("políčka musejí být vyplněna, mezera se nepočítá");
     }else{

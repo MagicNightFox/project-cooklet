@@ -1,20 +1,15 @@
-import classNames from 'classnames';
+
 import styles from './Navbar.module.css';
 import BackdropModal from './BackdropModal';
-import Homepage from './pages/Home';
-import Account from "./pages/Account";
 
 import Auth from './auth/Authentication';
-import { getAuth, onAuthStateChanged} from 'firebase/auth';
-import { db, auth} from "../config/firebase";
-import { getDoc, doc } from 'firebase/firestore';
+import { auth} from "../config/firebase";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 import { useEffect, useState } from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 function Navbar(){
-
   const [logoUrl, setLogoUrl] = useState("");
   const [loggedUser, setLoggedUser] = useState();
   useEffect(() => {

@@ -1,21 +1,21 @@
 
 import styles from './Recipe.module.css';
 
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import {db, auth} from "../config/firebase";
 import { useEffect, useState } from 'react';
-import {getDoc, doc, deleteDoc, where, collection, getDocs} from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
+import {getDoc, doc, deleteDoc} from "firebase/firestore";
 
 function Recipe(){
+
     const navigate = useNavigate();
     const {recipeId} = useParams();
     const [recipe, setRecipe] = useState(null);
     const [isAuthor, setIsAuthor] = useState();
     const [recID, setRecID] = useState("nothing");
 
-    const recipeRef= doc(db, "recipes", recipeId);
+    const recipeRef= doc(db, "recipes", recipeId); //vytáhne z databáze "recipes" recept s patřičnou Id kterou převzal od funkce na parametry (Prakticky bere to co je v adresovém řádku)
     async function findRecipe(){
       try {
         const recipeSnap = await getDoc(recipeRef);
@@ -42,7 +42,7 @@ function Recipe(){
       findRecipe();
     }, []);
     
-async function deleteRecipe() {
+async function deleteRecipe() { // smazání dokumentu
   try {
     await deleteDoc(recipeRef);
     navigate(`/`, {replace:true});
@@ -51,10 +51,8 @@ async function deleteRecipe() {
     }
 };
 
+// v kodu se pomocí .map projede array ingrediencí
     return(
-
-        
-
 <div className={styles.body}>
 <div className={styles.recipe}>
 <h2 className={styles.recipeName}>{recipe!= null && recipe.name}</h2>
@@ -62,7 +60,7 @@ async function deleteRecipe() {
 <div className={styles.recipeIngredients}>
 <h3>Ingredience: </h3>
 <div>
-<ul>{ recipe!= null && recipe.ingredients.map((arrayItem, index) =>(<div key={index}><li>{arrayItem}</li></div>))}</ul>
+<ul>{ recipe!= null && recipe.ingredients.map((arrayItem, index) =>(<div key={index}><li>{arrayItem}</li></div>))}</ul> 
 </div>
 </div>
 <div className={styles.recipeInstructions}>

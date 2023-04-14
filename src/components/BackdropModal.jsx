@@ -1,6 +1,5 @@
 import styles from "./BackdropModal.module.css";
 
-
 function BackdropModal({children, onClose}){
 return(
     <>
@@ -10,6 +9,7 @@ return(
     </dialog>
     </>
 );
+// {children} nám vyrenderuje všechny komponenty co jsou obaleny touto komponentou
 }
 
 export default BackdropModal;

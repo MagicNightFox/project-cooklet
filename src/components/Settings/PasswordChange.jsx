@@ -1,7 +1,7 @@
 import styles from "./Settings.module.css";
 import { useState } from "react";
 import { reauthenticateWithCredential, EmailAuthProvider, updatePassword} from "firebase/auth";
-import { auth, db } from "../../config/firebase";
+import { auth, } from "../../config/firebase";
 import "firebase/auth";
 
 
@@ -9,7 +9,6 @@ function PasswordChange({onSent}){
     const [newPassword, setNewPassword] = useState("");
     const [password, setPassword] = useState("");
     const [confirmationPassword, setConfirmationPassword] = useState("");
-
     function confirmChange(e){
         e.preventDefault();
         const user = auth.currentUser;

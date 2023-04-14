@@ -6,7 +6,8 @@ import { auth, db, googleProvider } from "../../config/firebase";
 import "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
-function UsernameChange({providerIsGoogle}){
+function UsernameChange({providerIsGoogle}){ 
+ 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 const navigate = useNavigate();
@@ -24,7 +25,7 @@ const user = auth.currentUser;
                           displayName: username
                         });
                         //console.log("new username: ",username);
-                        navigate(0); 
+                        navigate(0); //reload stránky
                     } else{
                         alert("Delší jméno, alespoň 4 písmena");
                         }
@@ -40,7 +41,7 @@ const user = auth.currentUser;
                     }
                 });;
     }
-    function confirmWithGoogle(e){
+    function confirmWithGoogle(e){ 
       reauthenticateWithPopup(user, googleProvider).then(async () =>{
         if(username.trim().length > 3){
         await updateProfile(user, {
@@ -58,7 +59,7 @@ const user = auth.currentUser;
       e.preventDefault();
 
     }
-
+// condicionalně je nastaveno, že pokud je přijmutá hodnota providerIsGoogle pravdivá, vyrenderuje se nám reautentikace pomocí googlu, jinak normálně přes form a přes reautentikaci heslem
 return(<div className={styles.body}>
     {!providerIsGoogle ?
     <div className={styles.form_container}>
@@ -110,7 +111,7 @@ return(<div className={styles.body}>
       <div>Confirmation</div>
       <hr className={styles.line}/>
     </div>
-    <button title="Confirm" onClick={confirmWithGoogle} className={styles.sign_in_ggl}>
+    <button title="Confirm" onClick={confirmWithGoogle} className={styles.change_btn}>
     <div>Confirm with Google</div>
   </button>
   </div>

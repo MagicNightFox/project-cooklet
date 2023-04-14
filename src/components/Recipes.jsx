@@ -1,10 +1,10 @@
 import styles from "./Recipes.module.css";
-/*import Recipe from "./Recipe";*/
+
 import NewRecipe from "./NewRecipe";
 import BackdropModal from "./BackdropModal";
 
 import {db, auth} from "../config/firebase";
-import {getDocs, collection, addDoc, deleteDoc, doc} from "firebase/firestore";
+import {getDocs, collection, addDoc} from "firebase/firestore";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -25,13 +25,11 @@ function Recipes() {
         }
       });
       }, [auth]);
-//database recipes
-const [recipeList, setRecipeList] = useState([]);
 
+      // vytažení receptů z databáze
+const [recipeList, setRecipeList] = useState([]);
 const recipesCollectionRef = collection(db, "recipes");
-//getting recipes from database and showing them
- 
-const getRecipeList = async () => {
+const getRecipeList = async () => {       
   try {
     const data = await getDocs(recipesCollectionRef);
     const filteredData = data.docs.map((doc) => ({...doc.data(), id: doc.id,}))
@@ -45,7 +43,7 @@ useEffect(() => {
   getRecipeList();
 }, []);
 
-//  Adding recipes to the database
+//  Přidání nového receptu
 async function addRecipeHandler(recipeData){
   try {
     await addDoc(recipesCollectionRef, recipeData);
@@ -55,7 +53,7 @@ async function addRecipeHandler(recipeData){
     }
 };
 
-//  Hiding/showing New Recipe Form
+//  Zobrazení/schování formuláře
 const [elementIsVisible, setElementIsVisible] = useState(false);
   function hideElementHandler() {
     setElementIsVisible(false);
@@ -63,7 +61,6 @@ const [elementIsVisible, setElementIsVisible] = useState(false);
   function showElementHandler() {
     setElementIsVisible(true);
   }
-
 
 return( <div className={styles.body}>
 <div className={styles.recipesGrid}>

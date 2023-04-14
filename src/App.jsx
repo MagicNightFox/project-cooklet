@@ -4,7 +4,6 @@ import Account from "./components/pages/Account";
 import MyRecipes from "./components/pages/MyRecipes";
 import Navbar from "./components/Navbar";
 import Recipe from "./components/Recipe";
-import NotLogged from "./components/pages/notLogged";
 import EditRecipe from "./components/EditRecipe";
 
 import Footer from "./components/Footer";
@@ -20,7 +19,6 @@ function App() {
     <Route path="/Account" element={<Account />}></Route>
     <Route path="/MyRecipes" element={<MyRecipes />}></Route>
     <Route path="/Recipe/:recipeId" element={<Recipe />}></Route>
-    <Route path="/NotLogged" element={<NotLogged />}></Route>
     <Route path="Recipe/edit/:recipeId" element={<EditRecipe />}></Route>
     <Route path="*" element={<Navigate to="/" replace />} /> 
   </Routes>

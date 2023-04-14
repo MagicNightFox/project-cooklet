@@ -1,27 +1,28 @@
 import styles from './NewRecipe.module.css';
-import classNames from 'classnames';
 import { useState } from 'react';
 
 import {auth} from "../config/firebase";
 
 function NewRecipe({onSent, onAddRecipe}){
-    
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [instructions, setInstructions] = useState("");
-    const [ingredients, setIngredients] = useState([""]);
+    const [ingredients, setIngredients] = useState([""]); 
     
     const ingredientChangeHandler = (index, event) => {
         const values = [...ingredients];
         values[index] = event.target.value;
         setIngredients(values);
-      };
+      }; //při změně v daném inputu ingredience se zavolá funkce, předá se jí index a změněný input. Vytvoří se nové pole identické k 
+         //poli ingrediencí v usestatu. vytvořenému poli se na obdrženém indexu uloží daná hodnota a poté se pole ingrediencí nastaví 
+         //na vytvořené pole, tím se úspěšně změní právě ta daná ingredience
     
       const addIngredientHandler = () => {
         const values = [...ingredients];
         values.push('');
         setIngredients(values);
-      };
+      }; //Podobný způsob jako u změny ingredience, tady se při kliknutí na button na konec pole přidá prázdná hodnota, 
+         //tím se obnoví usestate a níže ve formuláři se vyrenderuje další položka input
 
     return(
         <>
@@ -42,7 +43,7 @@ function NewRecipe({onSent, onAddRecipe}){
             </div>
             <div>
         <label className={styles.input_label} htmlFor="ingredients">Ingredients:</label>
-        {ingredients.map((ingredient, index) => (
+        {ingredients.map((ingredient, index) => ( // projede to array ingredients (defaultně s jednou položkou) a vyrenderuje tolik inputu pro ingredience, kolik je položek v ingredients. každé přidá index.
           <div key={index} className={styles.input_container}>
             <label className={styles.input_label_ingredient} htmlFor={`ingredient${index}`}></label>
             <input
@@ -74,7 +75,7 @@ function NewRecipe({onSent, onAddRecipe}){
     )
         function submitHandler(e){
             e.preventDefault();
-            const validIngredients = ingredients.filter(ingredient => ingredient.trim() !== '');
+            const validIngredients = ingredients.filter(ingredient => ingredient.trim() !== ''); //filter nám přeskočí ingredience, které jsou po odstranění whitespacu prázdné
             if(name.trim().length === 0 || description.trim().length === 0 || instructions.trim().length === 0 || validIngredients.length === 0){
                 alert("políčka musejí být vyplněna, mezera se nepočítá");
             }else{  
@@ -92,24 +93,5 @@ function NewRecipe({onSent, onAddRecipe}){
 
         
 }
-
-/*
-
-<br/>
-                <label htmlFor="description">Popis </label>
-                <input type="text" id="description" required onChange={descriptionChangeHandler}></input>
-                <br/>
-                <label htmlFor="instructions">Postup</label>
-                <div className={styles.textAreaWrapper}>
-                <textarea id="instructions" cols={30} rows={10} required onChange={instructionsChangeHandler}></textarea>
-                </div>
-                <br/>
-                <label htmlFor="ingredients">Ingredience</label>
-                <div className={styles.textAreaWrapper}>
-                <textarea id="ingredients" cols={30} rows={5} required onChange={ingredientsChangeHandler}></textarea>
-                </div>
-                <br/>
-
-*/
 
 export default NewRecipe;

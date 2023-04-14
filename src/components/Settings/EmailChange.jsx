@@ -8,7 +8,6 @@ import "firebase/auth";
 function EmailChange({onSent}){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     function confirmChange(e){
         e.preventDefault();
         const user = auth.currentUser;
