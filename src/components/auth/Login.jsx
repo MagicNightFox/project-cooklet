@@ -10,12 +10,10 @@ function Login({switchToRegister}){
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  console.log(auth?.currentUser?.email);
-
   const logIn = async () => {
     try{
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in successfully");
+      //console.log("User logged in successfully");
       window.location.reload();
     }
     catch (error){
@@ -26,9 +24,9 @@ function Login({switchToRegister}){
   } else if (error.code === "auth/missing-password") {
     alert("Where password?");
   } else if (error.code === "auth/user-not-found") {
-    alert("Uživatel neexistuje");
+    alert("User not found");
   } else if (error.code == "auth/too-many-requests"){
-    alert("Váš účet byl na nějakou dobu pozastaven z důvodu několika nepovedených pokusů o přihlášení, zkuste to prosím později.");
+    alert("Your account has been temporarily disabled due to too many failed log-in attempts. Please try again later.");
 }else{
       console.error("Error logging in user:", error);
     }
@@ -50,11 +48,10 @@ function Login({switchToRegister}){
               email: gmail
             }); 
           } else {
-          console.log("Account already exists, logging in...");
+          //console.log("Account already exists, logging in...");
           window.location.reload();
         }
-    console.log("User signed in successfully");
-    /*window.location.reload();*/
+    //console.log("User signed in successfully");
     } catch (error) {
         console.error("Error signing in user:", error);
     }

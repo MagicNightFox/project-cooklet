@@ -17,11 +17,11 @@ function Recipes() {
         if (user) {
           // zkusit vymazat, všichni uživatelé mají vytvořený účet v dokumentech a měli by všichni mít username a tohle by teda nebylo třeba
           setLoggedUser(user);
-          console.log("a user is logged in");
+          //console.log("a user is logged in");
         }
         else{
           setLoggedUser(null);
-          console.log("a user is not logged in");
+          //console.log("a user is not logged in");
         }
       });
       }, [auth]);

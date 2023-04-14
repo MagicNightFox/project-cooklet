@@ -6,7 +6,7 @@ function Footer(){
         <>
         <footer>
             <div className={styles.foot}>
-            <p>Stránka slouží pouze jako univerzitní projekt.</p>
+            <p>Stránka slouží pouze jako univerzitní projekt. | Nikola Trpková</p>
             </div>
         </footer>
         </>

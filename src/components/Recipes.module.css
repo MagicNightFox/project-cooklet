@@ -8,26 +8,26 @@
     
 }
 
-.recipesGrid h1{
-    padding: 100px 0 10000px 0;
-    color:gray; 
-}
-
 .addRecipeSmall button{
-    border: none;
-    padding: 2rem 2rem;
+    min-height: 40px;
+    padding: 0 2rem;
     margin: 2rem 0;
-        border-radius: 25px;
+    border: 0;
+    background: #ffffff;
+    border-radius: 7px;
+    outline: none;
+    color: #242424;
+    border: 1px solid #e5e5e5;
         transition: box-shadow 0.5s, border-radius 0.5s, transform 0.5s;
         box-shadow: 0px 0px 10px 5px rgba(61, 61, 61, 0.2);
+        
     }
     
 .addRecipeSmall button:hover{
         cursor: pointer;
         box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
-        /*border-radius: 10px;*/
         transform: scale(1.05);
-        max-height:15rem;
+        
         animation: recipeSlideOut 1s;
     }
 
@@ -73,12 +73,6 @@
     }
     
 .recipesGrid .recipeNameSmall{
-        /*
-            IMPLEMENT UPLOADED IMAGE AS BCG MAYBE
-
-        background-size: cover;
-        background-position: center;
-        */
         height: fit-content;
         background-color: white;
         overflow: hidden;
@@ -117,4 +111,61 @@
         margin: 0 15%;
         padding-top: 8%; 
         min-height: 100vh;
+    }
+
+    /* Tablets */
+    @media (max-width: 768px) {
+        .recipesGrid{
+            display: block;
+            gap: 2vw;
+            padding: 0 1%;
+            align-items: stretch;
+        }
+        .recipesGrid .recipeSmall{
+            overflow:hidden;
+            border-radius: 0;
+            padding:5% 0;
+            height: fit-content;
+            background-color: white;
+            color: black;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+    .recipesGrid .recipeSmall:hover{
+            cursor: pointer;
+            box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+    .recipesGrid .recipeInfoSmall{
+            position:absolute;
+            height: 100%;
+            z-index: 1;
+            background-color: rgba(0, 0, 0, 0.418);
+            opacity: 0;
+            transition: opacity 1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width:100%;
+        }
+    }
+    .myRecipes .body{
+        background-color: rgba(255, 255,255,0.7);
+                margin: 0;
+                padding: 8% 1rem; 
+                min-height: 100vh;
+    }
+    
+    
+      /* Mobiles */
+    @media (max-width: 480px) {
+        .recipesGrid h2{
+            font-size: 16pt;
+        }
+
     }

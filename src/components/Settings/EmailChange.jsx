@@ -25,7 +25,7 @@ function EmailChange({onSent}){
                         await updateDoc(doc(db,"users", user.uid),{
                             email: email
                         });
-                        console.log("new email: ",email);
+                        //console.log("new email: ",email);
                         onSent();
                     }).catch((error) => {
                         console.error("error updating email: ",error);

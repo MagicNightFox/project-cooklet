@@ -47,3 +47,32 @@ text-align: right;
 }
 
 
+    /* Tablets */
+    @media (max-width: 768px) {
+        nav{
+            position: relative;
+            width:100%;
+        border: 1px solid rgb(245, 245, 245);
+        z-index: 4;
+        
+        }
+        .nav{
+            padding: 0 15%;
+            display:flex;
+            justify-content: center;
+            flex-direction: column;
+            background-color: rgb(255, 255, 255);
+            align-items: center;
+            min-height: 3rem;
+        }
+
+        .subitem{
+            display: block; 
+            padding: 0 2rem;
+        }
+    }
+    
+      /* Mobiles */
+    @media (max-width: 480px) {
+        
+    }

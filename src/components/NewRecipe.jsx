@@ -6,48 +6,67 @@ import {auth} from "../config/firebase";
 
 function NewRecipe({onSent, onAddRecipe}){
     
-let ingredientArray = [];
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [instructions, setInstructions] = useState("");
-    const [ingredients, setIngredients] = useState("");
-    const [ingredient, setIngredient] = useState("");
+    const [ingredients, setIngredients] = useState([""]);
+    
+    const ingredientChangeHandler = (index, event) => {
+        const values = [...ingredients];
+        values[index] = event.target.value;
+        setIngredients(values);
+      };
+    
+      const addIngredientHandler = () => {
+        const values = [...ingredients];
+        values.push('');
+        setIngredients(values);
+      };
 
-    const newIngredient = <div className={styles.input_container}>
-    <label className={styles.input_label} htmlFor="recipeIgredient_field">Ingredients</label>
-    <input placeholder="Ingredient" title="Input title" name="input-ingredients" type="text" className={styles.input_field} id="recipeIngredient_field" required onChange={(e) => setIngredient(e.target.value)} value={ingredient}/>
-</div>;
     return(
         <>
         <div className={styles.body}>
         <div className={styles.newRecipe}>
-            <h2>PŘIDEJ RECEPT</h2>
             <form styles={styles.form_container} onSubmit={submitHandler}>
             <div className={styles.title_container}>
                 <p className={styles.title}>Add a recipe!</p>
-                <div className={styles.subtitle}>Přidejte svůj unikátní recept, dodatečné informace budou možné doplnit při úpravě receptu.</div>
+                <div className={styles.subtitle}>Add your very own unique recipe, you will be able to add more information to the recipe when editting</div>
             </div>
             <div className={styles.input_container}>
                 <label className={styles.input_label} htmlFor="recipeName_field">Recipe Name</label>
-                <input placeholder="Recipe Name" title="Input title" name="input-name" type="text" className={styles.input_field} id="recipeName_field" required onChange={(e) => setName(e.target.value)} value={name}/>
+                <input placeholder="Recipe Name" title="Input title" name="input-name" type="text" className={styles.input_field} id="recipeName_field" required maxLength="50" onChange={(e) => setName(e.target.value)} value={name}/>
             </div>
             <div className={styles.input_container}>
-                <label className={styles.input_label} htmlFor="recipeDescription_field">Description</label>
-                <input placeholder="Recipe Description" title="Input title" name="input-description" type="text" className={styles.input_field} id="recipeDescription_field" required onChange={(e) => setDescription(e.target.value)} value={description}/>
+                <label className={styles.input_label} htmlFor="recipeDescription_field">Short Description</label>
+                <input placeholder="Short Description (max 75 characters)" title="Input title" name="input-description" type="text" className={styles.input_field} id="recipeDescription_field" required maxLength="75" onChange={(e) => setDescription(e.target.value)} value={description}/>
             </div>
-            <div className={styles.input_container}>
-                <label className={styles.input_label} htmlFor="recipeIgredient_field">Ingredients</label>
-                <input placeholder="Ingredient" title="Input title" name="input-ingredients" type="text" className={styles.input_field} id="recipeIngredient_field" required onChange={(e) => setIngredient(e.target.value)} value={ingredient}/>
-            </div>
-            
+            <div>
+        <label className={styles.input_label} htmlFor="ingredients">Ingredients:</label>
+        {ingredients.map((ingredient, index) => (
+          <div key={index} className={styles.input_container}>
+            <label className={styles.input_label_ingredient} htmlFor={`ingredient${index}`}></label>
+            <input
+              className={styles.input_field}
+              placeholder={`#${index+1} ingredient`}
+              type="text"
+              id={`ingredient${index}`}
+              name={`ingredient${index}`}
+              value={ingredient}
+              onChange={(event) => ingredientChangeHandler(index, event)}
+              required
+            />
+          </div>
+        ))}
+        <div className={styles.title_container}>
+    <div className={styles.subtitle}>*input empty space to discard ingredient</div>
+  </div>
+        <button className={styles.addIngredient_btn} type="button" onClick={addIngredientHandler}>Add Ingredient</button>
+      </div>
             <div className={styles.input_container}>
                 <label className={styles.input_label} htmlFor="recipeInstructions_field">Instructions</label>
-                <div className={styles.textAreaWrapper}>
                 <textarea cols={30} rows={10} placeholder="Instructions" title="Input title" name="input-instructions" type="text" className={styles.input_field} id="recipeInstructions_field" required onChange={(e) => setInstructions(e.target.value)} value={instructions}/>
-                </div>
             </div>
-                
-                <input id="submitButton" type="submit" value="Post Recipe"></input>
+                <input className={styles.newRecipe_btn} id="submitButton" type="submit" value="Post Recipe"></input>
             </form>
         </div>
         </div>
@@ -55,29 +74,23 @@ let ingredientArray = [];
     )
         function submitHandler(e){
             e.preventDefault();
-            if(ingredient.trim().length == 0 || name.trim().length == 0 || description.trim().length == 0 || instructions.trim().length == 0){
+            const validIngredients = ingredients.filter(ingredient => ingredient.trim() !== '');
+            if(name.trim().length === 0 || description.trim().length === 0 || instructions.trim().length === 0 || validIngredients.length === 0){
                 alert("políčka musejí být vyplněna, mezera se nepočítá");
             }else{  
                 const recipeData = {
                     name: name,
                     description: description,
                     instructions: instructions,
-                    ingredients: ingredient,
+                    ingredients: validIngredients,
                     userId: auth?.currentUser?.uid,
-                    author: auth?.currentUser?.displayName,
                 };
                 onAddRecipe(recipeData);
                 onSent();
             }
         }
 
-        function addIngredientHandler(e){
-            ingredientArray.push(newIngredient);
-            console.log(ingredientArray);
-            e.preventDefault();
-
-
-        }
+        
 }
 
 /*

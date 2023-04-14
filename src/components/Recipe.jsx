@@ -11,7 +11,7 @@ import { onAuthStateChanged } from "firebase/auth";
 function Recipe(){
     const navigate = useNavigate();
     const {recipeId} = useParams();
-    const [recipe, setRecipe] = useState("nic");
+    const [recipe, setRecipe] = useState(null);
     const [isAuthor, setIsAuthor] = useState();
     const [recID, setRecID] = useState("nothing");
 
@@ -29,7 +29,7 @@ function Recipe(){
             setIsAuthor(false);
           }
         } else {
-          console.log("No such document!");
+          //console.log("No such document!");
           navigate(`/`, {replace:true});
         }
         } catch (error) {
@@ -57,24 +57,25 @@ async function deleteRecipe() {
 
 <div className={styles.body}>
 <div className={styles.recipe}>
-<h2 className={styles.recipeName}>{recipe.name}</h2>
-<p className={styles.recipeDesc}>{recipe.description}</p>
+<h2 className={styles.recipeName}>{recipe!= null && recipe.name}</h2>
+<p className={styles.recipeDesc}>{recipe!= null && recipe.description}</p>
 <div className={styles.recipeIngredients}>
-<h3>Ingredience:</h3>
-<p>{recipe.ingredients}</p>
+<h3>Ingredience: </h3>
+<div>
+<ul>{ recipe!= null && recipe.ingredients.map((arrayItem, index) =>(<div key={index}><li>{arrayItem}</li></div>))}</ul>
+</div>
 </div>
 <div className={styles.recipeInstructions}>
 <h3>Postup:</h3>
-<p>{recipe.instructions}</p>
+<p>{recipe!= null && recipe.instructions}</p>
 </div>
-<h3>Test arraye:</h3>
-<p>{/*recipe.array.map((arrayItem) =>(<div>{arrayItem}</div>))*/}</p>
-</div>
-<hr></hr>
 
+</div>
+
+<hr></hr>
 {isAuthor 
 ? <div className={styles.recipeConfig}>
-<button><Link to={`/Recipe/edit/${recID}`}>Edit</Link></button>
+<button onClick={() => {navigate(`/Recipe/edit/${recID}`, {replace:true});}}>Edit</button>
 <button onClick={deleteRecipe}>Delete</button>
 </div> 
 : null}

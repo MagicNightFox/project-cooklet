@@ -18,7 +18,7 @@ function PasswordChange({onSent}){
         if (newPassword == confirmationPassword){
             reauthenticateWithCredential(user, credential).then(() => {
                 updatePassword(user, newPassword).then( async ()=>{
-                    console.log("password updated successfully");
+                    //console.log("password updated successfully");
                     onSent();
                 }).catch((error) => {
                     console.error("error updating email: ",error);

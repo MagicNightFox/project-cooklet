@@ -1,55 +1,63 @@
-import { ProviderId, getAuth } from "firebase/auth";
-import {auth, db} from "../../config/firebase";
 import styles from "./layout.module.css";
-import { logOut } from "../auth/Authentication";
+//importované react funkce
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+//importované firebase funkce
+import {auth, db} from "../../config/firebase";
+import { signOut } from "firebase/auth";
 import { getDoc, doc } from "firebase/firestore";
-
+//importované komponenty
 import BackdropModal from "../BackdropModal";
 import ChangeEmail from "../Settings/EmailChange";
 import ChangePassword from "../Settings/PasswordChange";
 import ChangeUsername from "../Settings/UsernameChange";
 
 function Account(){
-    //have account info (maybe profile picture, email, name, username, maybe in the future even number of recipes submitted, number of recipes favorited)
-    // input Settings
-//Settings could be rendered upon click - you only see a button that says to show settings and once clicked, they roll out under the information above it
 const [loggedUser, setLoggedUser] = useState(null);
 const [providerIsGoogle, setProviderIsGoogle] = useState(true);
 const [calledForm, setCalledForm] = useState();
 const navigate = useNavigate();
 
+//funkce pro odhlášení
+const logOut = async () => { 
+    try {
+    await signOut(auth);
+    //console.log("User signed out successfully");
+    } catch (error) {
+        console.error("Error signing out user:", error);
+    }
+  };
+
+  //funkce pro získání přihlášeného uživatele a získání jeho patřičného záznemů v databázi "users"
 function getUser(){
 auth.onAuthStateChanged(async function(user) {
-    if (user != null) {
+    if (user != null) { 
             await getDoc(doc(db, "users", user.uid)).then((userSnapshot) => {
             if(userSnapshot.exists()){
-                setLoggedUser(userSnapshot.data());
+                setLoggedUser(userSnapshot.data());             //existuje daný uživatel a k němu záznam? uložit uživatele do proměnné loggedUser
             }
             else{
-                console.error("No user of this email!");
+                console.error("No user of this email!");        //neexistuje? vyhodi
             }
             });
         
         if(user.providerData[0].providerId != "google.com"){
-        setProviderIsGoogle(false);
-
+        setProviderIsGoogle(false);                             //pokud je uživatel přihlášen přes google, má omezená možnosti změny
         }else{
             setProviderIsGoogle(true);
         }
     }
     else{
         setLoggedUser(null);
-        navigate("/", {replace:true});
+        navigate("/", {replace:true}); //pokud není přihlášen tak ho to automaticky přenese na hlavní stránku aplikace
     }
 });
 }
-useEffect(() => {
+useEffect(() => { //vyvolá funkci při každé změně přihlášeného uživatele - přihlášení/odhlášení
     getUser();
 }, [auth]);
 
-const [changeFormIsVisible, setChangeFormIsVisible] = useState(false);
+const [changeFormIsVisible, setChangeFormIsVisible] = useState(false);  //funugje pro schování či zobrazení formuláře pro změnu
     function hideChangeFormHandler() {
       setChangeFormIsVisible(false);
     }
@@ -70,18 +78,24 @@ null
 <div>
     <h2>{loggedUser.username}</h2>
     <p>{loggedUser.email}</p>
-<button onClick={logOut} className={styles.logout}>Log Out</button><br></br>
-<button onClick={() => {setCalledForm(<ChangeUsername providerIsGoogle = {providerIsGoogle} onSent={() => {getUser(); hideChangeFormHandler();}}/>);showChangeFormHandler();}}>Change username</button>
+    <div className={styles.account_btn_container}>
+<button className={styles.account_btn} onClick={logOut}>Log Out</button>
+<div className={styles.divider}>
+    <hr className={styles.line}/>
+    <div>Settings</div>
+    <hr className={styles.line}/>
+  </div>
+<button className={styles.account_btn} onClick={() => {setCalledForm(<ChangeUsername providerIsGoogle = {providerIsGoogle} onSent={() => {getUser(); hideChangeFormHandler();}}/>);showChangeFormHandler();}}>Change username</button>
 {providerIsGoogle 
     ? <div className={styles.subtitle}>*We can't change your gmail or gmail password, sorry!</div>
     : <div>
+    
+    <button className={styles.account_btn} onClick={() => {setCalledForm(<ChangeEmail onSent={() => {getUser(); hideChangeFormHandler();}}/>) ;showChangeFormHandler();}}>Change email</button>
     <br/>
-    <button onClick={() => {setCalledForm(<ChangeEmail onSent={() => {getUser(); hideChangeFormHandler();}}/>) ;showChangeFormHandler();}}>Change email</button>
-    <br/>
-    <button onClick={() => {setCalledForm(<ChangePassword onSent={() => {getUser(); hideChangeFormHandler();}}/>);showChangeFormHandler();}}>Change password</button>
+    <button className={styles.account_btn} onClick={() => {setCalledForm(<ChangePassword onSent={() => {getUser(); hideChangeFormHandler();}}/>);showChangeFormHandler();}}>Change password</button>
     </div>
     }
-
+</div>
 </div>
 </div>
 {changeFormIsVisible ? (

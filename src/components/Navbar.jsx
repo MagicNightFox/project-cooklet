@@ -38,7 +38,7 @@ function Navbar(){
             setLogoUrl(url); //uložíme url staženého loga do usestatu aby mohlo být použito jako source v navigaci
           })
           .catch((error) => {
-            console.log(error);
+            console.error(error);
           });
       }, []);
 
@@ -51,7 +51,7 @@ function Navbar(){
         setSignInIsVisible(true);
       }
       else{
-        console.log(auth.currentUser.displayName);
+        //console.log(auth.currentUser.displayName);
         setSignInIsVisible(true);
       }
     }
@@ -65,7 +65,6 @@ function Navbar(){
                 <div className={styles.item}><Link to="/"><img className={styles.logo} src={logoUrl} alt="Logo" /></Link></div>
                 <div className={styles.menu}>
                 <div className={styles.subitem}><Link to="/" className={styles.link}>HOME</Link></div>
-                {loggedUser ? <div className={styles.subitem}><Link to="/MyFavorites" className={styles.link}>MY FAVORITES</Link></div>: null}
                 {loggedUser ? <div className={styles.subitem}> <Link to="/MyRecipes" className={styles.link}>MY RECIPES</Link></div> : null}
                 </div>
                 {profileUser}
