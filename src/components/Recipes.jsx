@@ -78,7 +78,6 @@ return( <div className={styles.body}>
       
     <div className={styles.recipeInfoSmall}>
       <p>{recipe.description}</p>
-      <p className={styles.recipeAuthorSmall}>{recipe.author}</p>
       </div>
       
   </div>

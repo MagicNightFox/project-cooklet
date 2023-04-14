@@ -1,6 +1,6 @@
 import styles from "./Settings.module.css";
 import { useState } from "react";
-import { reauthenticateWithCredential, EmailAuthProvider, updateEmail, SignInMethod, fetchSignInMethodsForEmail } from "firebase/auth";
+import { reauthenticateWithCredential, EmailAuthProvider, updateEmail, fetchSignInMethodsForEmail } from "firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../config/firebase";
 import "firebase/auth";

@@ -115,29 +115,11 @@
 
     /* Tablets */
     @media (max-width: 768px) {
-        .recipesGrid{
-            display: block;
-            gap: 2vw;
-            padding: 0 1%;
-            align-items: stretch;
-        }
-        .recipesGrid .recipeSmall{
-            overflow:hidden;
-            border-radius: 0;
-            padding:5% 0;
-            height: fit-content;
-            background-color: white;
-            color: black;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-    .recipesGrid .recipeSmall:hover{
-            cursor: pointer;
-            box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
+        .myRecipes .body{
+            background-color: rgba(255, 255,255,0.7);
+                    margin: 0;
+                    padding: 8% 1rem; 
+                    min-height: 100vh;
         }
         
     .recipesGrid .recipeInfoSmall{
@@ -154,12 +136,7 @@
             width:100%;
         }
     }
-    .myRecipes .body{
-        background-color: rgba(255, 255,255,0.7);
-                margin: 0;
-                padding: 8% 1rem; 
-                min-height: 100vh;
-    }
+    
     
     
       /* Mobiles */
@@ -167,5 +144,23 @@
         .recipesGrid h2{
             font-size: 16pt;
         }
-
+        .recipesGrid{
+            display: block;
+            gap: 2vw;
+            padding: 0 1%;
+            align-items: stretch;
+        }
+        .recipesGrid .recipeSmall{
+            overflow:hidden;
+            border-radius: 0;
+            padding:2% 0;
+            margin: 15px 0;
+            height: fit-content;
+            background-color: white;
+            color: black;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     }
