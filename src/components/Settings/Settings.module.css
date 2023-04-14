@@ -1,31 +1,4 @@
 
-.newRecipe{
-    
-    top:0;
-    left: 0;
-    overflow: hidden;
-    
-
-}
-
-.newRecipe h2{
-    padding:5px;
-}
-
-.newRecipe form{
-padding:10px;
-}
-
-.newRecipe input[type=text]{
-    width: 100%;
-}
-
-.newRecipe textarea {
-    width:100%;
-    resize: none;
-    padding: 1px 5px;
-}
-
 .form_container {
     width: fit-content;
     height: fit-content;
@@ -74,7 +47,14 @@ padding:10px;
     flex-direction: column;
     gap: 5px;
   }
-
+  
+  .icon {
+    width: 20px;
+    position: absolute;
+    z-index: 99;
+    left: 12px;
+    bottom: 9px;
+  }
   
   .input_label {
     font-size: 0.75rem;
@@ -98,5 +78,33 @@ padding:10px;
     border: 1px solid transparent;
     box-shadow: 0px 0px 0px 2px #242424;
     background-color: transparent;
+  }
+  
+  .change_btn {
+    width: 100%;
+    height: 40px;
+    border: 0;
+    background: #115DFC;
+    border-radius: 7px;
+    outline: none;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .divider {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    color: #8B8E98;
+  }
+  
+  .divider .line {
+    display: block;
+    width: 100%;
+    height: 1px;
+    border: 0;
+    background-color: #e8e8e8;
   }
   

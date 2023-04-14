@@ -1,17 +1,19 @@
 
 import styles from './Recipe.module.css';
 
-import { useParams } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 import {db, auth} from "../config/firebase";
 import { useEffect, useState } from 'react';
-import {getDoc, doc, where, collection, getDocs} from "firebase/firestore";
+import {getDoc, doc, deleteDoc, where, collection, getDocs} from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
-function Recipe(){
 
+function Recipe(){
+    const navigate = useNavigate();
     const {recipeId} = useParams();
     const [recipe, setRecipe] = useState("nic");
     const [isAuthor, setIsAuthor] = useState();
+    const [recID, setRecID] = useState("nothing");
 
     const recipeRef= doc(db, "recipes", recipeId);
     async function findRecipe(){
@@ -19,8 +21,16 @@ function Recipe(){
         const recipeSnap = await getDoc(recipeRef);
         if (recipeSnap.exists()) {
           setRecipe(recipeSnap.data());
+          if (auth.currentUser != null && recipeSnap.data().userId == auth.currentUser.uid){
+            setIsAuthor(true);
+            setRecID(recipeSnap.id);
+          }
+          else{
+            setIsAuthor(false);
+          }
         } else {
           console.log("No such document!");
+          navigate(`/`, {replace:true});
         }
         } catch (error) {
             console.error("Error retrieving Docs from database: ", error);
@@ -32,39 +42,14 @@ function Recipe(){
       findRecipe();
     }, []);
     
-    
-/*
-    const recipesCollectionRef = collection(db, "recipes");
-    const getRecipe = async () => {
-        try {
-          const data = await getDocs(recipesCollectionRef);
-          const filteredData = data.docs.map((rec) => {
-            if(rec.id === recipeId){               
-                setRecipe(rec.data());
-            }
-        })
-
-          } catch (error) {
-              console.error("Error retrieving Doc from database: ", error);
-          }
-      };
-      useEffect(() => {
-        getRecipe();
-
-      }, []);
-*/
-
-function checkAuthor(){
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    console.log(user)
-    // ...
-  } else {
-    // User is signed out
-    // ...
-  }
-});
-}
+async function deleteRecipe() {
+  try {
+    await deleteDoc(recipeRef);
+    navigate(`/`, {replace:true});
+    } catch (error) {
+        console.error("Error retrieving Docs from database: ", error);
+    }
+};
 
     return(
 
@@ -82,12 +67,15 @@ onAuthStateChanged(auth, (user) => {
 <h3>Postup:</h3>
 <p>{recipe.instructions}</p>
 </div>
+<h3>Test arraye:</h3>
+<p>{/*recipe.array.map((arrayItem) =>(<div>{arrayItem}</div>))*/}</p>
 </div>
 <hr></hr>
 
 {isAuthor 
 ? <div className={styles.recipeConfig}>
-<></>
+<button><Link to={`/Recipe/edit/${recID}`}>Edit</Link></button>
+<button onClick={deleteRecipe}>Delete</button>
 </div> 
 : null}
 </div>

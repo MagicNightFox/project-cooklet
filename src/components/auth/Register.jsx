@@ -2,8 +2,8 @@ import styles from "./Authentication.module.css";
 import { useState } from "react";
 
 import {auth, googleProvider, db} from "../../config/firebase";
-import {createUserWithEmailAndPassword ,signInWithPopup} from "firebase/auth";
-import { setDoc, doc, addDoc } from "firebase/firestore";
+import {createUserWithEmailAndPassword ,signInWithPopup, updateProfile} from "firebase/auth";
+import { setDoc, doc, addDoc, getDoc } from "firebase/firestore";
 function Register({switchToLogin}){
 
     const [email, setEmail] = useState("");
@@ -16,10 +16,14 @@ function Register({switchToLogin}){
         try {
           if (password == confirmationPassword){
             if(username.trim().length > 3){
-              await createUserWithEmailAndPassword(auth, email, password).then(
-              setDoc(doc(db,"users", email), {
+              const { user } = await createUserWithEmailAndPassword(auth, email, password);
+              await setDoc(doc(db,"users", user.uid), {
                 username: username,
-              }));
+                email: email
+              });
+              await updateProfile(user, {
+                displayName: username
+              });
               console.log("User signed in successfully");
               window.location.reload();
             }
@@ -48,7 +52,22 @@ function Register({switchToLogin}){
 
       const signInWithGoogle = async () => {
         try {
-        await signInWithPopup(auth, googleProvider); 
+        await signInWithPopup(auth, googleProvider);
+          const user = auth.currentUser;
+          const uid = user.uid;
+          const gmail = user.email;
+          const username = user.displayName;
+              const docRef = doc(db, "users", uid);
+              const docSnap = await getDoc(docRef);
+              if (!docSnap.exists()) {
+                setDoc(docRef, {
+                  username: username,
+                  email: gmail
+                }); 
+              } else {
+                console.log("Account already exists, logging in...");
+              }
+          
         console.log("User signed in successfully");
         window.location.reload();
         } catch (error) {

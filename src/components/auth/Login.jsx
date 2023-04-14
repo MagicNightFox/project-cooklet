@@ -1,9 +1,9 @@
 import styles from "./Authentication.module.css";
 import { useState } from "react";
 
-import {auth, googleProvider} from "../../config/firebase";
+import {auth, googleProvider, db} from "../../config/firebase";
 import {signInWithEmailAndPassword,signInWithPopup} from "firebase/auth";
-
+import { setDoc, doc, getDoc } from "firebase/firestore";
 
 function Login({switchToRegister}){
 
@@ -25,7 +25,11 @@ function Login({switchToRegister}){
       alert("Wrong password");
   } else if (error.code === "auth/missing-password") {
     alert("Where password?");
-  } else{
+  } else if (error.code === "auth/user-not-found") {
+    alert("Uživatel neexistuje");
+  } else if (error.code == "auth/too-many-requests"){
+    alert("Váš účet byl na nějakou dobu pozastaven z důvodu několika nepovedených pokusů o přihlášení, zkuste to prosím později.");
+}else{
       console.error("Error logging in user:", error);
     }
     }
@@ -33,9 +37,24 @@ function Login({switchToRegister}){
   
   const signInWithGoogle = async () => {
     try {
-    await signInWithPopup(auth, googleProvider); 
+      await signInWithPopup(auth, googleProvider);
+      const user = auth.currentUser;
+      const uid = user.uid;
+      const gmail = user.email;
+      const username = user.displayName;
+          const docRef = doc(db, "users", uid);
+          const docSnap = await getDoc(docRef);
+          if (!docSnap.exists()) {
+            setDoc(docRef, {
+              username: username,
+              email: gmail
+            }); 
+          } else {
+          console.log("Account already exists, logging in...");
+          window.location.reload();
+        }
     console.log("User signed in successfully");
-    window.location.reload();
+    /*window.location.reload();*/
     } catch (error) {
         console.error("Error signing in user:", error);
     }

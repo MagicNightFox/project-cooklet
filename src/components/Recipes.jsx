@@ -3,46 +3,53 @@ import styles from "./Recipes.module.css";
 import NewRecipe from "./NewRecipe";
 import BackdropModal from "./BackdropModal";
 
-import {db} from "../config/firebase";
-import {getDocs, collection, addDoc, deleteDoc, doc, updateDoc} from "firebase/firestore";
+import {db, auth} from "../config/firebase";
+import {getDocs, collection, addDoc, deleteDoc, doc} from "firebase/firestore";
 
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function Recipes() {
+  //je uživatel přihlášen?
+  const [loggedUser, setLoggedUser] = useState(null);
+  useEffect(() => {
+        auth.onAuthStateChanged(async function(user) {
+        if (user) {
+          // zkusit vymazat, všichni uživatelé mají vytvořený účet v dokumentech a měli by všichni mít username a tohle by teda nebylo třeba
+          setLoggedUser(user);
+          console.log("a user is logged in");
+        }
+        else{
+          setLoggedUser(null);
+          console.log("a user is not logged in");
+        }
+      });
+      }, [auth]);
 //database recipes
 const [recipeList, setRecipeList] = useState([]);
 
 const recipesCollectionRef = collection(db, "recipes");
 //getting recipes from database and showing them
+ 
 const getRecipeList = async () => {
   try {
     const data = await getDocs(recipesCollectionRef);
     const filteredData = data.docs.map((doc) => ({...doc.data(), id: doc.id,}))
     setRecipeList(filteredData);
-    getRecipeList();
     } catch (error) {
         console.error("Error retrieving Docs from database: ", error);
     }
 };
-useEffect(() => { 
+//Vyrendruje recepty po načtení stránky
+useEffect(() => {
   getRecipeList();
 }, []);
+
 //  Adding recipes to the database
 async function addRecipeHandler(recipeData){
   try {
     await addDoc(recipesCollectionRef, recipeData);
-    } catch (error) {
-        console.error("Error retrieving Docs from database: ", error);
-    }
-
-  
-};
-//  Deleting recipes from the database
-const deleteRecipe = async (id) => {
-  const recipeDoc = doc(db, "recipes", id)
-  try {
-    await deleteDoc(recipeDoc);
+    getRecipeList();
     } catch (error) {
         console.error("Error retrieving Docs from database: ", error);
     }
@@ -71,8 +78,6 @@ return( <div className={styles.body}>
       
     <div className={styles.recipeInfoSmall}>
       <p>{recipe.description}</p>
-      
-      <button onClick={() => deleteRecipe(recipe.id)}>Delete</button>
       <p className={styles.recipeAuthorSmall}>{recipe.author}</p>
       </div>
       
@@ -83,7 +88,7 @@ return( <div className={styles.body}>
       ))}
 </div>
 <br />
-
+    <div>
       <hr />
       {elementIsVisible ? (
         <BackdropModal onClose={hideElementHandler}>
@@ -93,9 +98,13 @@ return( <div className={styles.body}>
           />
         </BackdropModal>
       ) : null}
+      {loggedUser ?
+      
       <div className={styles.addRecipeSmall}>
         <button onClick={showElementHandler}>Přidej vlastní recept!</button>
       </div>
+    : null}
+    </div>
 </div>
 );
 

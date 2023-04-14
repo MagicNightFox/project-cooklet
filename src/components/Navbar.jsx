@@ -8,41 +8,39 @@ import Auth from './auth/Authentication';
 import { getAuth, onAuthStateChanged} from 'firebase/auth';
 import { db, auth} from "../config/firebase";
 import { getDoc, doc } from 'firebase/firestore';
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 import { useEffect, useState } from 'react';
 import {Link, useNavigate} from "react-router-dom";
 
 function Navbar(){
 
-
-  const [loggedUser, setLoggedUser] = useState(null);
+  const [logoUrl, setLogoUrl] = useState("");
+  const [loggedUser, setLoggedUser] = useState();
   useEffect(() => {
         auth.onAuthStateChanged(async function(user) {
         if (user) {
-          // zkusit vymazat, všichni uživatelé mají vytvořený účet v dokumentech a měli by všichni mít username a tohle by teda nebylo třeba
-          if(user.displayName == null){
-            await getDoc(doc(db, "users", user.email)).then((userSnapshot) => {
-              if(userSnapshot.exists()){
-                const username = userSnapshot.data().username;
-                setLoggedUser(username);
-              }
-              else{
-                console.error("No user of this email!");
-              }
-            });
-          }
-          else{
-            setLoggedUser(user.displayName);
-          }
-          console.log("nav detection works, a user is logged in");
-          console.log(auth.currentUser);
+          setLoggedUser(auth.currentUser.displayName);          //uživatel je přihlášen a jeho jméno je zapsáno pro vyrenderování v navbaru
         }
         else{
-          setLoggedUser(null);
-          console.log("nav detection works, a user is not logged in");
+          setLoggedUser(null);                                  //uživatel není přihlášen
         }
       });
       }, [auth]);
+
+      //ve firebase storage je uloženo logo projektu, které je poté staženo do browseru a nastaveno jako logo v Navbaru
+      useEffect(() => {
+        const storage = getStorage();
+        const logoRef = ref(storage, "gs://cookletproject.appspot.com/logo2.png"); 
+        
+        getDownloadURL(logoRef) // stáhneme logo do browseru
+          .then((url) => {
+            setLogoUrl(url); //uložíme url staženého loga do usestatu aby mohlo být použito jako source v navigaci
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }, []);
 
     const [signInIsVisible, setSignInIsVisible] = useState(false);
     function hideSignInHandler() {
@@ -58,17 +56,17 @@ function Navbar(){
       }
     }
 
-
-    const profileUser = loggedUser === null ? <div className={styles.link} onClick={showSignInHandler}>PROFILE</div> : <div className={styles.link}><Link to="/Account" className={styles.link}>{loggedUser}</Link></div>;
+    
+    const profileUser = loggedUser === null ? <div className={styles.link} onClick={showSignInHandler}>ACCOUNT</div> : <div className={styles.link}><Link to="/Account" className={styles.link}>{loggedUser}</Link></div>;
 
     return (<>
         <nav>
             <div className={styles.nav}>
-                <div className={styles.item}><Link to="/"><img className={styles.logo} src="/src/components/img/logo/logo2.png" alt="LOGO"></img></Link></div>
+                <div className={styles.item}><Link to="/"><img className={styles.logo} src={logoUrl} alt="Logo" /></Link></div>
                 <div className={styles.menu}>
                 <div className={styles.subitem}><Link to="/" className={styles.link}>HOME</Link></div>
-                <div className={styles.subitem}><Link to="/MyFavorites" className={styles.link}>MY FAVORITES</Link></div>
-                <div className={styles.subitem}><Link to="/MyRecipes" className={styles.link}>MY RECIPES</Link></div>
+                {loggedUser ? <div className={styles.subitem}><Link to="/MyFavorites" className={styles.link}>MY FAVORITES</Link></div>: null}
+                {loggedUser ? <div className={styles.subitem}> <Link to="/MyRecipes" className={styles.link}>MY RECIPES</Link></div> : null}
                 </div>
                 {profileUser}
             </div>
